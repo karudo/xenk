@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "declaration": true,
+    "noImplicitAny": false,
+    "rootDir": "src",
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "pretty": true,
+    "removeComments": true,
+    "jsx": "react",
+    "skipLibCheck": true
+  },
+  "include": [
+    "./typings.d.ts",
+    "./src/index.ts",
+    "./src/server.ts",
+    "./src/test-utils.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "lib"
+   ]
+}
