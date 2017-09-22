@@ -1,7 +1,7 @@
 export default {
   input: "lib/index.js",
   output: {
-    file: "lib/react-apollo.umd.js",
+    file: "lib/xenk.umd.js",
     format: "umd"
   },
   sourcemap: true,
