@@ -1,6 +1,6 @@
 {
   "name": "xenk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Xenk - a query builder for GraphQL",
   "main": "lib/xenk.umd.js",
   "module": "./lib/index.js",
