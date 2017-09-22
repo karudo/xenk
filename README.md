@@ -25,7 +25,7 @@ const query = createQuery(queryField, {
 console.log(query)
 /*
 query ($postid: ID!) {
-  post (id: $id) {
+  post (id: $postid) {
     id
     title
     text
