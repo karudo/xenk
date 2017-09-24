@@ -1,6 +1,6 @@
 # xenk
 
-## A GraphQL query builder.
+## GraphQL query builder.
 
 ### examples
 

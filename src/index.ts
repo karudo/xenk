@@ -30,7 +30,7 @@ export function field (select: string, fields?: [XenkField], args?: XenkArgs ): 
 function stringifyField (field: XenkFieldPrepack): string {
   let str = field.select;
   if (field.args) {
-    str += ` (${Object.keys(field.args).map(a => `${a}: $${a}`).join(`, `)})`;
+    str += ` (${Object.keys(field.args).map(a => `${a}: $${field.args[a]}`).join(`, `)})`;
   }
   if (field.fields) {
     const fields = field.fields.map(f => {
