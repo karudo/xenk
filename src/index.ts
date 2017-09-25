@@ -19,7 +19,7 @@ export type XenkFieldPrepack = {
   args: XenkArgs
 };
 
-export function field (select: string, fields?: [XenkField], args?: XenkArgs ): XenkFieldPrepack {
+export function field (select: string, fields?: XenkField[], args?: XenkArgs): XenkFieldPrepack {
   return {
     select: select,
     fields,
