@@ -15,7 +15,7 @@ export type XenkVariables = {
 
 export type XenkFieldPrepack = {
   select: string,
-  fields: [XenkField],
+  fields: XenkField[],
   args: XenkArgs
 };
 
