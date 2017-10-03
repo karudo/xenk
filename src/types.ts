@@ -37,6 +37,6 @@ export function list(listItemType: XenkTypeFunction): XenkVariableType {
   return createScalar(`[${listItemType()}]`);
 }
 
-export function scalar(listItemType: string): XenkVariableType {
-  return createScalar(listItemType);
+export function scalar(scalarName: string): XenkVariableType {
+  return createScalar(scalarName);
 }

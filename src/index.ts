@@ -14,28 +14,26 @@ export type XenkVariables = {
 };
 
 export type XenkFieldPrepack = {
-  select: string,
-  fields: XenkField[],
+  name: string,
+  subFields: XenkField[],
   args: XenkArgs
 };
 
-export function field (select: string, fields?: XenkField[], args?: XenkArgs): XenkFieldPrepack {
+export function field (fieldName: string, subFields?: XenkField[], args?: XenkArgs): XenkFieldPrepack {
   return {
-    select: select,
-    fields,
+    name: fieldName,
+    subFields,
     args
   };
 }
 
-function stringifyField (field: XenkFieldPrepack): string {
-  let str = field.select;
-  if (field.args) {
-    str += ` (${Object.keys(field.args).map(a => `${a}: $${field.args[a]}`).join(`, `)})`;
+function stringifyField ({name, subFields, args}: XenkFieldPrepack): string {
+  let str = name;
+  if (args) {
+    str += ` (${Object.keys(args).map(argName => `${argName}: $${args[argName]}`).join(`, `)})`;
   }
-  if (field.fields) {
-    const fields = field.fields.map(f => {
-      return typeof f === 'string' ? f : stringifyField(f);
-    });
+  if (subFields) {
+    const fields = subFields.map(f => typeof f === 'string' ? f : stringifyField(f));
     str += ` {\n${fields.join('\n')}\n}`;
   }
   return str;
