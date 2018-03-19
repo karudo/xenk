@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/karudo/xenk#readme",
   "devDependencies": {
-    "rollup": "^0.50.0",
-    "tslint": "^5.7.0",
-    "typescript": "^2.5.2"
+    "rollup": "^0.57.1",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
   }
 }
