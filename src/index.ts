@@ -39,18 +39,23 @@ function stringifyField ({name, subFields, args}: XenkFieldPrepack): string {
   return str;
 }
 
-function createGraphQLQuery (queryType: string, field: XenkFieldPrepack, variables?: XenkVariables): string {
+function createGraphQLQuery (
+  queryType: string,
+  field: XenkFieldPrepack,
+  variables?: XenkVariables,
+  name?: string
+): string {
   let varsStr = '';
   if (variables) {
     varsStr = `(${Object.keys(variables).map(k => `$${k}: ${variables[k]()}`).join(', ')}) `;
   }
-  return `${queryType} ${varsStr}{\n${stringifyField(field)}\n}`;
+  return `${queryType} ${name || ''}${varsStr}{\n${stringifyField(field)}\n}`;
 }
 
-export function createQuery(field: XenkFieldPrepack, variables?: XenkVariables) {
-  return createGraphQLQuery('query', field, variables);
+export function createQuery(field: XenkFieldPrepack, variables?: XenkVariables, name?: string) {
+  return createGraphQLQuery('query', field, variables, name);
 }
 
-export function createMutation(field: XenkFieldPrepack, variables?: XenkVariables) {
-  return createGraphQLQuery('mutation', field, variables);
+export function createMutation(field: XenkFieldPrepack, variables?: XenkVariables, name?: string) {
+  return createGraphQLQuery('mutation', field, variables, name);
 }
