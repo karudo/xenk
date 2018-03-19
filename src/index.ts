@@ -5,6 +5,8 @@ import {XenkTypeFunction} from './types';
 
 export type XenkField = string | XenkFieldPrepack;
 
+export type XenkSubField = XenkField | XenkField[]
+
 export type XenkArgs = {
   [key: string]: string
 };
@@ -15,11 +17,11 @@ export type XenkVariables = {
 
 export type XenkFieldPrepack = {
   name: string,
-  subFields: XenkField[],
+  subFields: XenkSubField,
   args: XenkArgs
 };
 
-export function field (fieldName: string, subFields?: XenkField[], args?: XenkArgs): XenkFieldPrepack {
+export function field (fieldName: string, subFields?: XenkSubField, args?: XenkArgs): XenkFieldPrepack {
   return {
     name: fieldName,
     subFields,
@@ -33,7 +35,8 @@ function stringifyField ({name, subFields, args}: XenkFieldPrepack): string {
     str += ` (${Object.keys(args).map(argName => `${argName}: $${args[argName]}`).join(`, `)})`;
   }
   if (subFields) {
-    const fields = subFields.map(f => typeof f === 'string' ? f : stringifyField(f));
+    const subFieldsArr = Array.isArray(subFields) ? subFields : [subFields];
+    const fields = subFieldsArr.map(f => typeof f === 'string' ? f : stringifyField(f));
     str += ` {\n${fields.join('\n')}\n}`;
   }
   return str;
