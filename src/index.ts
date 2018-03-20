@@ -52,7 +52,7 @@ export class XenkInlineFragmentPrepack {
   }
 
   toString () {
-    return `... ${this.type} on {\n${this.fields.map(f => f.toString()).join('\n')}\n}\n`;
+    return `... on ${this.type} {\n${this.fields.map(f => f.toString()).join('\n')}\n}\n`;
   }
 }
 
