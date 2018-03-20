@@ -5,7 +5,11 @@ import {XenkTypeFunction} from './types';
 
 export type XenkField = string | XenkFieldPrepack;
 
-export type XenkSubField = XenkField | XenkField[]
+export type XenkInlineFragment = XenkInlineFragmentPrepack;
+
+export type XenkSubFieldUnion = XenkField | XenkInlineFragment;
+
+export type XenkSubField = XenkSubFieldUnion | XenkSubFieldUnion[];
 
 export type XenkArgs = {
   [key: string]: string
@@ -15,31 +19,49 @@ export type XenkVariables = {
   [key: string]: XenkTypeFunction
 };
 
-export type XenkFieldPrepack = {
-  name: string,
-  subFields: XenkSubField,
-  args: XenkArgs
-};
+export class XenkFieldPrepack {
+  public name: string;
+  public subFields: XenkSubField;
+  public args: XenkArgs;
+  constructor (name, subFields, args) {
+    this.name = name;
+    this.subFields = subFields;
+    this.args = args
+  }
 
-export function field (fieldName: string, subFields?: XenkSubField, args?: XenkArgs): XenkFieldPrepack {
-  return {
-    name: fieldName,
-    subFields,
-    args
-  };
+  toString () {
+    let str = this.name;
+    if (this.args) {
+      str += ` (${Object.keys(this.args).map(argName => `${argName}: $${this.args[argName]}`).join(`, `)})`;
+    }
+    if (this.subFields) {
+      const subFieldsArr = Array.isArray(this.subFields) ? this.subFields : [this.subFields];
+      const fields = subFieldsArr.map(f => typeof f === 'string' ? f : f.toString());
+      str += ` {\n${fields.join('\n')}\n}`;
+    }
+    return str;
+  }
 }
 
-function stringifyField ({name, subFields, args}: XenkFieldPrepack): string {
-  let str = name;
-  if (args) {
-    str += ` (${Object.keys(args).map(argName => `${argName}: $${args[argName]}`).join(`, `)})`;
+export class XenkInlineFragmentPrepack {
+  public type: string;
+  public fields: [XenkField];
+  constructor (type, fields) {
+    this.type = type;
+    this.fields = fields;
   }
-  if (subFields) {
-    const subFieldsArr = Array.isArray(subFields) ? subFields : [subFields];
-    const fields = subFieldsArr.map(f => typeof f === 'string' ? f : stringifyField(f));
-    str += ` {\n${fields.join('\n')}\n}`;
+
+  toString () {
+    return `... ${this.type} on {\n${this.fields.map(f => f.toString()).join('\n')}\n}\n`;
   }
-  return str;
+}
+
+export function field (name: string, subFields?: XenkSubField, args?: XenkArgs): XenkFieldPrepack {
+  return new XenkFieldPrepack(name, subFields, args)
+}
+
+export function inlineFragment (type: string, fields: XenkField[]): XenkInlineFragmentPrepack {
+  return new XenkInlineFragmentPrepack(type, fields)
 }
 
 function createGraphQLQuery (
@@ -52,7 +74,7 @@ function createGraphQLQuery (
   if (variables) {
     varsStr = `(${Object.keys(variables).map(k => `$${k}: ${variables[k]()}`).join(', ')}) `;
   }
-  return `${queryType} ${name || ''}${varsStr}{\n${stringifyField(field)}\n}`;
+  return `${queryType} ${name || ''}${varsStr}{\n${field.toString()}\n}`;
 }
 
 export function createQuery(field: XenkFieldPrepack, variables?: XenkVariables, name?: string) {
